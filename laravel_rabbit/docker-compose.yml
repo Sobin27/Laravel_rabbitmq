@@ -1,0 +1,29 @@
+version: '3.8'
+
+name: messaging_system
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: messaging_system_backend
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: messaging_system
+            DB_USERNAME: root
+            DB_PASSWORD: 1234
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/app
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: 'rabbitmq'
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ~/.docker/rabbitmq/data/:/var/lib/rabbitmq/
+            - ~/.docker/rabbitmq/log/:/var/log/rabbitmq
